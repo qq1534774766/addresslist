@@ -11,18 +11,10 @@
     android:background="@drawable/directory_img2"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/iv"
-        android:layout_width="wrap_content"
-        android:layout_height="136dp"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/directory_img1" />
-
     <LinearLayout
         android:id="@+id/ll_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/iv"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="0dp"
         android:background="#FFFFFF">
@@ -139,21 +131,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            android:orientation="vertical" >
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/tv_show"
+                android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="304dp"
-                android:layout_marginTop="25dp"
-                android:scrollbars="vertical"
-                android:textSize="20sp" />
+                android:layout_height="match_parent" />
         </LinearLayout>
     </ScrollView>
 
