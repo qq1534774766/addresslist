@@ -26,6 +26,7 @@ class SQLLite(val context: Context):
         onCreate(db)
     }
     //以下4个方法，都是对数据库联系人的增删改查操作
+
     //添加联系人
     fun add(context: Context,user: User): Long {
         if ("" == user.name || "" == user.phone) {
@@ -34,6 +35,11 @@ class SQLLite(val context: Context):
         }
         //获取数据库
         val db = this.writableDatabase
+        var cursor = db.query("information", null, "name = ?", arrayOf(user.name), null, null, null) as Cursor
+        if (cursor.getCount()>0){
+            Toast.makeText(context, "联系人已经存在！", Toast.LENGTH_LONG).show()
+            return -1
+        }
         //数据组装
         val anote= ContentValues().apply {
             put("name",user.name)
@@ -46,16 +52,20 @@ class SQLLite(val context: Context):
     //查找联系人
     fun query(context: Context,user: User):ArrayList<User>{
         val userList = ArrayList<User>()
+        //获取数据库
         val db = this.writableDatabase
+        // select * from information where name like %name%
         val args = arrayOf("%"+user.name+"%")
+        //结果集存放的地方
         var cursor: Cursor? = null
         cursor = if ("" == user.name) {
-            //如果name内容为空。
+            //如果name内容为空，则查全部数据。
             db.query("information", null, null, null, null, null, null)
         } else {
-            //name输入框不为空
+            //name输入框不为空，模糊搜索name
             db.query("information", null, "name like ?", args, null, null, null)
         }
+        //对cursor(从数据库得到的结果)进行遍历，逐个添加到ArrayList集合当中
         while (cursor.moveToNext()){
             val id = cursor.getString(0)
             val name = cursor.getString(1)
@@ -63,7 +73,6 @@ class SQLLite(val context: Context):
             val url = "aguo"
             userList.add(User(id.toInt(),name,phone,url))
         }
-
         return userList
     }
     //更新联系人
@@ -72,11 +81,14 @@ class SQLLite(val context: Context):
             Toast.makeText(context, "姓名和电话都不可为空", Toast.LENGTH_LONG).show()
             return
         }
+        //获取数据库
         val db = this.writableDatabase
+        //组成参数集合对象
         val values = ContentValues()
         values.put("phone",user.phone)
+        //更新指定name的联系人
         db.update("information", values, "name=?", arrayOf(user.name))
-        Toast.makeText(context, "信息已更新", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, "联系人电话已更新", Toast.LENGTH_LONG).show()
     }
     //删除联系人
     fun delete(context: Context, name: String){
