@@ -1,10 +1,12 @@
 package com.gjht.addresslist
 
+import android.database.Cursor
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ScrollView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 
@@ -32,15 +34,19 @@ class Home : AppCompatActivity() {
         //得到数据库对象
         val dbHelper = SQLLite(this)
         userList = dbHelper.query(this,User("","",""))
+        //更新视图
+        updateView(userList)
 
         //绑定添加事件
         mBtnAdd.setOnClickListener{
-            dbHelper.add(User(mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
+            dbHelper.add(this,User(mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
             //清空表单
             mEtName.setText("")
             mEtPhone.setText("")
             //更新列表
             userList = dbHelper.query(this,User(mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
+            //更新视图
+            updateView(userList)
         }
 
         //绑定删除事件
@@ -51,6 +57,8 @@ class Home : AppCompatActivity() {
             mEtPhone.setText("")
             //更新列表
             userList = dbHelper.query(this,User(mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
+            //更新视图
+            updateView(userList)
         }
 
         //绑定更新事件
@@ -61,17 +69,33 @@ class Home : AppCompatActivity() {
             mEtPhone.setText("")
             //更新列表
             userList = dbHelper.query(this,User(mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
+            //更新视图
+            updateView(userList)
         }
 
         //绑定查询事件
         mBtnQuery.setOnClickListener {
-            userList = dbHelper.query(this,User(mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
             //更新列表
             userList = dbHelper.query(this,User(mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
+            //更新视图
+            updateView(userList)
         }
     }
-    fun init(){
-        //设置组件的点击事件
+    //更新联系人展示的视图，
+    fun updateView(userList: ArrayList<User> ){
+        //测试代码，可以删除
+
+        //获得展示联系人视图文本域
+        val textView = findViewById<TextView>(R.id.textView)
+
+        if (userList.size>0){
+            //更新视图展示联系人视图文本域
+            textView.setText("")
+            for (item in userList) {
+                textView.append("\nname:" +item.name+", phone:"+item.phone)
+            }
+        }
+        //以上代码可以注释，更换成RecycleView
 
 
     }

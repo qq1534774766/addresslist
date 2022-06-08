@@ -5,7 +5,6 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.widget.EditText
 import android.widget.Toast
 
 /**
@@ -27,7 +26,11 @@ class SQLLite(val context: Context):
     }
     //以下4个方法，都是对数据库联系人的增删改查操作
     //添加联系人
-    fun add(user: User){
+    fun add(context: Context,user: User){
+        if ("" == user.name || "" == user.phone) {
+            Toast.makeText(context, "信息不可为空", Toast.LENGTH_LONG).show()
+            return
+        }
         //获取数据库
         val db = this.writableDatabase
         //数据组装
@@ -35,25 +38,25 @@ class SQLLite(val context: Context):
             put("name",user.name)
             put("phone",user.phone)
         }
-        db.insert("note",null,anote)
+        db.insert("information",null,anote)
 
     }
     //查找联系人
     fun query(context: Context,user: User):ArrayList<User>{
         val userList = ArrayList<User>()
         val db = this.writableDatabase
-        val args = arrayOf(user.name)
+        val args = arrayOf("%"+user.name+"%")
         var cursor: Cursor? = null
         cursor = if ("" == user.name) {
             //如果name内容为空。
             db.query("information", null, null, null, null, null, null)
         } else {
             //name输入框不为空
-            db.query("information", null, "name = ?", args, null, null, null)
+            db.query("information", null, "name like ?", args, null, null, null)
         }
         while (cursor.moveToNext()){
-            val name = cursor.getString(0)
-            val phone = cursor.getString(1)
+            val name = cursor.getString(1)
+            val phone = cursor.getString(2)
             val url = "aguo"
             userList.add(User(name,phone,url))
         }
