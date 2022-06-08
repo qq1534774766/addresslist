@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.widget.Toast
 
 /**
- * 这是SQLLite轻量级数据库，跟普通SQL数据库一样建表增删改查的操作。
+ * 这是SQLLite轻量级数据库，属于安卓自带的数据库，与普通数据库操作一样，建表增删改查的操作与Mysql类似的。
  */
 class SQLLite(val context: Context):
     SQLiteOpenHelper(context, "NoteStore.db", null, 1) {
@@ -18,7 +18,8 @@ class SQLLite(val context: Context):
             " name VARCHAR(20)," +
             " phone VARCHAR(20))"
     override fun onCreate(db: SQLiteDatabase?) {
-        db?.execSQL(createNote)//仅在数据库创建时，执行一次，创建数据表
+        //仅在数据库创建时，执行一次，创建数据表
+        db?.execSQL(createNote)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -26,10 +27,10 @@ class SQLLite(val context: Context):
     }
     //以下4个方法，都是对数据库联系人的增删改查操作
     //添加联系人
-    fun add(context: Context,user: User){
+    fun add(context: Context,user: User): Long {
         if ("" == user.name || "" == user.phone) {
             Toast.makeText(context, "信息不可为空", Toast.LENGTH_LONG).show()
-            return
+            return -1;
         }
         //获取数据库
         val db = this.writableDatabase
@@ -38,7 +39,8 @@ class SQLLite(val context: Context):
             put("name",user.name)
             put("phone",user.phone)
         }
-        db.insert("information",null,anote)
+        //插入联系人数据
+        return db.insert("information",null,anote)
 
     }
     //查找联系人
@@ -55,10 +57,11 @@ class SQLLite(val context: Context):
             db.query("information", null, "name like ?", args, null, null, null)
         }
         while (cursor.moveToNext()){
+            val id = cursor.getString(0)
             val name = cursor.getString(1)
             val phone = cursor.getString(2)
             val url = "aguo"
-            userList.add(User(name,phone,url))
+            userList.add(User(id.toInt(),name,phone,url))
         }
 
         return userList
@@ -83,6 +86,6 @@ class SQLLite(val context: Context):
         }
         val db = this.writableDatabase
         db.delete("information","name=?", arrayOf(name))
-        Toast.makeText(context, "name已被删除", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, name+"已被删除", Toast.LENGTH_LONG).show()
     }
 }

@@ -14,8 +14,8 @@
     <ImageView
         android:id="@+id/iv"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:layout_marginTop="50dp"
+        android:layout_height="136dp"
+        android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/directory_img1" />
 
     <LinearLayout
@@ -150,7 +150,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/tv_show"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="304dp"
                 android:layout_marginTop="25dp"
                 android:scrollbars="vertical"
                 android:textSize="20sp" />

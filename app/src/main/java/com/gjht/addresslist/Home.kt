@@ -33,18 +33,23 @@ class Home : AppCompatActivity() {
         val scrollView = findViewById<View>(R.id.m_ScrollView) as ScrollView
         //得到数据库对象
         val dbHelper = SQLLite(this)
-        userList = dbHelper.query(this,User("","",""))
+        userList = dbHelper.query(this,User(0,"","",""))
         //更新视图
         updateView(userList)
 
         //绑定添加事件
         mBtnAdd.setOnClickListener{
-            dbHelper.add(this,User(mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
+            val insertNumber = dbHelper.add(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
+            //insertNumber<0表示添加了0条数据，表示添加失败
+            if (insertNumber<0){
+                //结束方法
+                return@setOnClickListener
+            }
             //清空表单
             mEtName.setText("")
             mEtPhone.setText("")
             //更新列表
-            userList = dbHelper.query(this,User(mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
+            userList = dbHelper.query(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
             //更新视图
             updateView(userList)
         }
@@ -56,19 +61,19 @@ class Home : AppCompatActivity() {
             mEtName.setText("")
             mEtPhone.setText("")
             //更新列表
-            userList = dbHelper.query(this,User(mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
+            userList = dbHelper.query(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
             //更新视图
             updateView(userList)
         }
 
         //绑定更新事件
         mBtnUpdate.setOnClickListener {
-            dbHelper.update(this,User(mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
+            dbHelper.update(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
             //清空表单
             mEtName.setText("")
             mEtPhone.setText("")
             //更新列表
-            userList = dbHelper.query(this,User(mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
+            userList = dbHelper.query(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
             //更新视图
             updateView(userList)
         }
@@ -76,7 +81,7 @@ class Home : AppCompatActivity() {
         //绑定查询事件
         mBtnQuery.setOnClickListener {
             //更新列表
-            userList = dbHelper.query(this,User(mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
+            userList = dbHelper.query(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(),"aguo"))
             //更新视图
             updateView(userList)
         }
@@ -96,6 +101,7 @@ class Home : AppCompatActivity() {
             }
         }
         //以上代码可以注释，更换成RecycleView
+
 
 
     }
