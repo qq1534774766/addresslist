@@ -75,7 +75,7 @@ class SQLLite(val context: Context):
             val id = cursor.getString(0)
             val name = cursor.getString(1)
             val phone = cursor.getString(2)
-            val url = "aguo"
+            val url =  R.drawable.user.toString()
             userList.add(User(id.toInt(),name,phone,url))
         }
         return userList
