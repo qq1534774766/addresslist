@@ -1,16 +1,17 @@
 package com.gjht.addresslist
 
-import android.database.Cursor
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
 
 /**
  * 联系人的主页面
@@ -48,6 +49,7 @@ class Home : AppCompatActivity() {
                 //结束方法
                 return@setOnClickListener
             }
+            Toast.makeText(this, "联系人"+mEtName.text.toString()+"添加成功", Toast.LENGTH_LONG).show()
             //清空表单
             mEtName.setText("")
             mEtPhone.setText("")
@@ -60,26 +62,56 @@ class Home : AppCompatActivity() {
 
         //绑定删除事件
         mBtnDelete.setOnClickListener{
-            dbHelper.delete(this,mEtName.text.toString())
-            //清空表单
-            mEtName.setText("")
-            mEtPhone.setText("")
-            //更新列表
-            userList = dbHelper.query(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(), R.drawable.user.toString()))
-            //更新视图
-           updateView(userList,mEtName,mEtPhone)
+            if ("" == mEtName.text.toString() ) {
+                Toast.makeText(this, "姓名不可为空", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+            //声明确认窗
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+            builder.setTitle("你确定要删除"+mEtName.text.toString()+"吗?")
+            builder.setPositiveButton("确定",
+                DialogInterface.OnClickListener { dialog, which ->
+                    //数据库执行删除
+                    dbHelper.delete(this,mEtName.text.toString())
+                    //清空表单
+                    mEtName.setText("")
+                    mEtPhone.setText("")
+                    //更新列表
+                    userList = dbHelper.query(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(), R.drawable.user.toString()))
+                    //更新视图
+                    updateView(userList,mEtName,mEtPhone)
+                })
+            builder.setNegativeButton("取消",
+                DialogInterface.OnClickListener { dialog, which ->
+                    return@OnClickListener
+                })
+            //显示确认窗口
+            builder.show()
         }
 
         //绑定更新事件
         mBtnUpdate.setOnClickListener {
-            dbHelper.update(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(), R.drawable.user.toString()))
-            //清空表单
-            mEtName.setText("")
-            mEtPhone.setText("")
-            //更新列表
-            userList = dbHelper.query(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(), R.drawable.user.toString()))
-            //更新视图
-           updateView(userList,mEtName,mEtPhone)
+            //声明修改确认窗
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+            builder.setTitle("你确定要修改"+mEtName.text.toString()+"吗?")
+            builder.setPositiveButton("确定",
+                DialogInterface.OnClickListener { dialog, which ->
+                    //数据库执行修改
+                    dbHelper.update(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(), R.drawable.user.toString()))
+                    //清空表单
+                    mEtName.setText("")
+                    mEtPhone.setText("")
+                    //更新列表
+                    userList = dbHelper.query(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(), R.drawable.user.toString()))
+                    //更新视图
+                    updateView(userList,mEtName,mEtPhone)
+                })
+            builder.setNegativeButton("取消",
+                DialogInterface.OnClickListener { dialog, which ->
+                    return@OnClickListener
+                })
+            //显示确认窗口
+            builder.show()
         }
 
         //绑定查询事件
@@ -89,8 +121,6 @@ class Home : AppCompatActivity() {
             //更新视图
             updateView(userList,mEtName,mEtPhone)
         }
-
-
 
 
     }

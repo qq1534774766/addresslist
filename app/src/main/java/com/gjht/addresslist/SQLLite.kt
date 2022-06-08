@@ -78,6 +78,7 @@ class SQLLite(val context: Context):
             val url =  R.drawable.user.toString()
             userList.add(User(id.toInt(),name,phone,url))
         }
+        Toast.makeText(context, "查询出共计"+userList.size+"条结果", Toast.LENGTH_LONG).show()
         return userList
     }
     //更新联系人
@@ -102,10 +103,7 @@ class SQLLite(val context: Context):
     }
     //删除联系人
     fun delete(context: Context, name: String){
-        if ("" == name ) {
-            Toast.makeText(context, "姓名不可为空", Toast.LENGTH_LONG).show()
-            return
-        }
+
         val db = this.writableDatabase
         db.delete("information","name=?", arrayOf(name))
         Toast.makeText(context, name+"已被删除", Toast.LENGTH_LONG).show()
