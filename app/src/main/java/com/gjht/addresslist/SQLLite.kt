@@ -33,6 +33,11 @@ class SQLLite(val context: Context):
             Toast.makeText(context, "信息不可为空", Toast.LENGTH_LONG).show()
             return -1;
         }
+        //正则表达式验证手机号只能为数字
+        if (!verifyName(context, phone = user.phone)){
+            Toast.makeText(context, "电话号码只能是数字！", Toast.LENGTH_LONG).show()
+            return -1;
+        }
         //获取数据库
         val db = this.writableDatabase
         var cursor = db.query("information", null, "name = ?", arrayOf(user.name), null, null, null) as Cursor
@@ -81,6 +86,11 @@ class SQLLite(val context: Context):
             Toast.makeText(context, "姓名和电话都不可为空", Toast.LENGTH_LONG).show()
             return
         }
+        //正则表达式验证手机号只能为数字
+        if (!verifyName(context, phone = user.phone)){
+            Toast.makeText(context, "电话号码只能是数字！", Toast.LENGTH_LONG).show()
+            return
+        }
         //获取数据库
         val db = this.writableDatabase
         //组成参数集合对象
@@ -99,5 +109,10 @@ class SQLLite(val context: Context):
         val db = this.writableDatabase
         db.delete("information","name=?", arrayOf(name))
         Toast.makeText(context, name+"已被删除", Toast.LENGTH_LONG).show()
+    }
+    fun verifyName(context: Context,phone: String):Boolean{
+        val regex = Regex(pattern = "^[1-9]+$")
+        val matched = regex.containsMatchIn(input = phone)
+        return matched
     }
 }
