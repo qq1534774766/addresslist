@@ -2,7 +2,9 @@ package com.gjht.addresslist
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -35,24 +37,43 @@ open class UserAdapter(val userList: List<User>, val name: TextView?, val phone:
 //        创建viewHolder
         val viewHolder = ViewHolder(view)
 //        给子项添加侦听事件，使得子项回显到输入框，并添加拨打电话的功能。
+
 //        拨打电话的功能必须在AndroidManifest.xml定义权限
         view.setOnClickListener{
-//        获取子项索引
-        val position = viewHolder.adapterPosition
-//        获取子项信息
-            name?.setText(userList.get(position).name)
-            phone.setText(userList.get(position).phone)
-            //不具有权限，则发出申请
-            val permission = Manifest.permission.CALL_PHONE
-            if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
+            //        获取子项索引
+            val position = viewHolder.adapterPosition
+            val builder = AlertDialog.Builder(activity)
+            builder.setTitle("要立即拨打"+userList.get(position).phone+"吗？")
+            builder.setPositiveButton(
+                "确定"
+            ) { dialog, which -> // TODO Auto-generated method stub
+
+                //        获取子项信息
+                name?.setText("")
+                phone.setText("")
+                //不具有权限，则发出申请
+                val permission = Manifest.permission.CALL_PHONE
+                if (ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
 //          requestPermissions方法最后一个参数是自定义的请求码，该请求的结果将在Home类的onRequestPermissionsResult展现
-                ActivityCompat.requestPermissions(activity,arrayOf(permission), 1)
-            } else {
-                //已具有权限，则启动拨打电话
-               call(phone.text.toString())
+                    ActivityCompat.requestPermissions(activity,arrayOf(permission), 1)
+                } else {
+                    //已具有权限，则启动拨打电话
+                    call(userList.get(position).phone)
+                }
             }
-    }
-    return viewHolder
+            builder.setNegativeButton("取消",
+                DialogInterface.OnClickListener { dialog, which -> // TODO Auto-generated method stub
+                    //        获取子项信息
+                    name?.setText(userList.get(position).name)
+                    phone.setText(userList.get(position).phone)
+                    return@OnClickListener
+                })
+            builder.show()
+
+        }
+
+
+        return viewHolder
     }
 //  数据绑定，绑定查询得到的结果到视图
     override fun onBindViewHolder(holder: UserAdapter.ViewHolder, position: Int) {

@@ -94,7 +94,7 @@ class SQLLite(val context: Context):
         }
         //获取数据库
         val db = this.writableDatabase
-        //组成参数集合对象
+        //组成参数集合对象13
         val values = ContentValues()
         values.put("phone",user.phone)
         //更新指定name的联系人
@@ -103,13 +103,17 @@ class SQLLite(val context: Context):
     }
     //删除联系人
     fun delete(context: Context, name: String){
-
+        if ("" == name) {
+            Toast.makeText(context, "姓名不可为空", Toast.LENGTH_LONG).show()
+            return
+        }
         val db = this.writableDatabase
         db.delete("information","name=?", arrayOf(name))
         Toast.makeText(context, name+"已被删除", Toast.LENGTH_LONG).show()
     }
+
     fun verifyName(context: Context,phone: String):Boolean{
-        val regex = Regex(pattern = "^[1-9]+$")
+        val regex = Regex(pattern = "^[0-9]+$")
         val matched = regex.containsMatchIn(input = phone)
         return matched
     }

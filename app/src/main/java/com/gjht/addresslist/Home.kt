@@ -122,6 +122,10 @@ class Home : AppCompatActivity() {
 
         // 清空输入框并显示完整的列表
         mBtnClear.setOnClickListener{
+            //如果表单没有任何内容
+            if ("" == mEtName.text.toString() && "" == mEtPhone.text.toString()) {
+                return@setOnClickListener
+            }
 //            清空表单
             mEtName.setText("")
             mEtPhone.setText("")
