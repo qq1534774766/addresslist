@@ -30,6 +30,7 @@ class Home : AppCompatActivity() {
         val mBtnQuery = findViewById<View>(R.id.btn_query) as Button
         val mBtnUpdate = findViewById<View>(R.id.btn_update) as Button
         val mBtnDelete = findViewById<View>(R.id.btn_delete) as Button
+        val mBtnClear = findViewById<View>(R.id.btn_clear) as Button
         //滚动条
 //        val scrollView = findViewById<View>(R.id.m_ScrollView) as ScrollView
         //得到数据库对象
@@ -88,6 +89,16 @@ class Home : AppCompatActivity() {
             updateView(userList,mEtName,mEtPhone)
         }
 
+        // 清空输入框并显示完整的列表
+        mBtnClear.setOnClickListener{
+//            清空表单
+            mEtName.setText("")
+            mEtPhone.setText("")
+//            全表查询
+            userList = dbHelper.query(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(), R.drawable.user.toString()))
+            //更新视图
+            updateView(userList,mEtName,mEtPhone)
+        }
 
     }
     //更新联系人展示的视图，

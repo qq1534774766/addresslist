@@ -118,16 +118,16 @@
             android:layout_marginRight="2dp"
             android:text="删除"
             />
+
         <Button
             android:id="@+id/btn_clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="18sp"
-            android:background="#ACD6FF"
             android:layout_marginRight="2dp"
-            android:text="清空"
-            />
+            android:layout_weight="1"
+            android:background="#ACD6FF"
+            android:text="清空输入"
+            android:textSize="18sp" />
 
 
     </LinearLayout>
@@ -143,7 +143,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
