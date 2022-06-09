@@ -1,14 +1,20 @@
 package com.gjht.addresslist
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
 
 /**
  * 联系人的主页面
@@ -59,26 +65,51 @@ class Home : AppCompatActivity() {
 
         //绑定删除事件
         mBtnDelete.setOnClickListener{
-            dbHelper.delete(this,mEtName.text.toString())
-            //清空表单
-            mEtName.setText("")
-            mEtPhone.setText("")
-            //更新列表
-            userList = dbHelper.query(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(), R.drawable.user.toString()))
-            //更新视图
-           updateView(userList,mEtName,mEtPhone)
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+            builder.setTitle("你确定要删除"+mEtName.text.toString()+"吗?")
+            builder.setPositiveButton("确定",
+                DialogInterface.OnClickListener { dialog, which -> // TODO Auto-generated method stub
+                    dbHelper.delete(this,mEtName.text.toString())
+                    //清空表单
+                    mEtName.setText("")
+                    mEtPhone.setText("")
+                    //更新列表
+                    userList = dbHelper.query(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(), R.drawable.user.toString()))
+                    //更新视图
+                    updateView(userList,mEtName,mEtPhone)
+                })
+
+            builder.setNegativeButton("取消",
+                DialogInterface.OnClickListener { dialog, which -> // TODO Auto-generated method stub
+                    return@OnClickListener
+                })
+            builder.show()
+
         }
 
         //绑定更新事件
         mBtnUpdate.setOnClickListener {
-            dbHelper.update(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(), R.drawable.user.toString()))
-            //清空表单
-            mEtName.setText("")
-            mEtPhone.setText("")
-            //更新列表
-            userList = dbHelper.query(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(), R.drawable.user.toString()))
-            //更新视图
-           updateView(userList,mEtName,mEtPhone)
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("你确定要更新"+mEtName.text.toString()+"吗?")
+            builder.setPositiveButton(
+                "确定"
+            ) { dialog, which -> // TODO Auto-generated method stub
+                dbHelper.update(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(), R.drawable.user.toString()))
+                //清空表单
+                mEtName.setText("")
+                mEtPhone.setText("")
+                //更新列表
+                userList = dbHelper.query(this,User(0,mEtName.text.toString(),mEtPhone.text.toString(), R.drawable.user.toString()))
+                //更新视图
+                updateView(userList,mEtName,mEtPhone)
+            }
+            builder.setNegativeButton("取消",
+                DialogInterface.OnClickListener { dialog, which -> // TODO Auto-generated method stub
+                    return@OnClickListener
+                })
+
+            builder.show()
+
         }
 
         //绑定查询事件
