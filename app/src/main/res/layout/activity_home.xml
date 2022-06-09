@@ -35,6 +35,7 @@
             android:layout_marginLeft="5dp"
             android:hint="请输入姓名"
             android:padding="10dp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -113,10 +114,21 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="18sp"
-            android:background="#ACD6FF"
+            android:background="#CDDC39"
             android:layout_marginRight="2dp"
             android:text="删除"
             />
+        <Button
+            android:id="@+id/btn_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:background="#ACD6FF"
+            android:layout_marginRight="2dp"
+            android:text="清空"
+            />
+
 
     </LinearLayout>
 
