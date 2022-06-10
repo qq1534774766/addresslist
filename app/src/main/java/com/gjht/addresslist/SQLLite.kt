@@ -63,12 +63,16 @@ class SQLLite(val context: Context):
         val args = arrayOf("%"+user.name+"%")
         //结果集存放的地方
         var cursor: Cursor? = null
-        cursor = if ("" == user.name) {
+        if ("" == user.name && ""==user.phone) {
             //如果name内容为空，则查全部数据。
-            db.query("information", null, null, null, null, null, null)
-        } else {
+            cursor =  db.query("information", null, null, null, null, null, null)
+        } else if("" != user.name && ""==user.phone){
             //name输入框不为空，模糊搜索name
-            db.query("information", null, "name like ?", args, null, null, null)
+            cursor =  db.query("information", null, "name like ?", arrayOf("%"+user.name+"%"), null, null, null)
+        }else if("" == user.name && ""!=user.phone){
+            cursor =  db.query("information", null, "phone like ?", arrayOf("%"+user.phone+"%"), null, null, null)
+        }else{
+            cursor =  db.query("information", null, "phone like ? and name like ?", arrayOf("%"+user.phone+"%","%"+user.name+"%"), null, null, null)
         }
         //对cursor(从数据库得到的结果)进行遍历，逐个添加到ArrayList集合当中
         while (cursor.moveToNext()){
